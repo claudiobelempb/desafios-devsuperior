@@ -1,7 +1,6 @@
 package br.com.surb.aula.entities;
 
 public class Employee {
-
     private String name;
     private double grossSalary;
 

@@ -1,7 +1,10 @@
 package br.com.surb.aula.services;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class PensionService {
-    public double discount(double discount){
-        return discount - 0.1;
+    public double discount(double amount){
+        return amount * 0.1;
     }
 }
