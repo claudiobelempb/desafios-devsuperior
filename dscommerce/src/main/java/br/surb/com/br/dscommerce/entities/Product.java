@@ -1,6 +1,5 @@
 package br.surb.com.br.dscommerce.entities;
 
-import io.micrometer.observation.Observation;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,8 +9,9 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -25,14 +25,14 @@ public class Product implements Serializable {
     private static final long serialVersionUID = -1852460332491894873L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String productId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Column(unique = true)
     private String name;
     @Column(columnDefinition = "TEXT")
     private String description;
     private Double price;
-    private String imgUri;
+    private String imgUrl;
 
     @ManyToMany
     @JoinTable(name = "tb_product_category",
@@ -40,8 +40,11 @@ public class Product implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
 
-    @PrePersist
-    public void prePersist() {
-        productId = String.valueOf(UUID.randomUUID());
+    @OneToMany(mappedBy = "id.product")
+    private final Set<OrderItem> items = new HashSet<>();
+
+    public List<Order> getOrders() {
+        return items.stream().map(item -> item.getOrder()).collect(Collectors.toList());
     }
+
 }

@@ -10,7 +10,11 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -24,8 +28,8 @@ public class Order implements Serializable {
     private static final long serialVersionUID = -1852460332491894873L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String orderId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant moment;
@@ -38,9 +42,11 @@ public class Order implements Serializable {
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Payment payment;
 
-    @PrePersist
-    public void prePersist() {
-        orderId = String.valueOf(UUID.randomUUID());
-        status = OrderEnum.WAITING_PAYMENT;
+    @OneToMany(mappedBy = "id.order")
+    private final Set<OrderItem> items = new HashSet<>();
+
+    public List<Product> getProducts() {
+        return items.stream().map(item -> item.getProduct()).collect(Collectors.toList());
     }
+
 }

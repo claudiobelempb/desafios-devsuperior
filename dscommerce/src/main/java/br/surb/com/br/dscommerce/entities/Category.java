@@ -24,16 +24,12 @@ public class Category implements Serializable {
     private static final long serialVersionUID = -1852460332491894873L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String categoryId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Column(unique = true)
     private String name;
 
     @ManyToMany(mappedBy = "categories")
     private Set<Product> products = new HashSet<>();
 
-    @PrePersist
-    public void prePersist() {
-        categoryId = String.valueOf(UUID.randomUUID());
-    }
 }
