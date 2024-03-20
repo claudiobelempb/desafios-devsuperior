@@ -1,6 +1,6 @@
-package br.surb.com.br.dscommerce.modules.user.repositories;
+package br.surb.com.br.dscommerce.repositories;
 
-import br.surb.com.br.dscommerce.modules.user.entities.User;
+import br.surb.com.br.dscommerce.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

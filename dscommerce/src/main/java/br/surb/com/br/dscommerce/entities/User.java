@@ -1,5 +1,6 @@
-package br.surb.com.br.dscommerce.modules.user.entities;
+package br.surb.com.br.dscommerce.entities;
 
+import br.surb.com.br.dscommerce.entities.Order;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +10,8 @@ import lombok.NoArgsConstructor;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -25,10 +28,14 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String userId;
     private String name;
+    @Column(unique = true)
     private String email;
     private String phone;
     private LocalDate birthDate;
     private String password;
+
+    @OneToMany(mappedBy = "client")
+    private List<Order> orders = new ArrayList<>();
 
     @PrePersist
     public void prePersist() {
