@@ -1,12 +1,12 @@
 package br.com.surb.surbeventos.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_participant")
@@ -15,10 +15,18 @@ public class Participant implements Serializable {
     @Serial
     private static final long serialVersionUID = 5112971261233577259L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long participantId;
     private String name;
     @Column(unique = true)
     private String email;
+
+    @ManyToMany
+    @JoinTable(name = "tb_participant_activity",
+            joinColumns = @JoinColumn(name = "participant_id"),
+            inverseJoinColumns = @JoinColumn(name = "activity_id"))
+    private final Set<Activity> activities = new HashSet<>();
 
     public Participant() {
     }
@@ -51,6 +59,10 @@ public class Participant implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Set<Activity> getActivities() {
+        return activities;
     }
 
     @Override

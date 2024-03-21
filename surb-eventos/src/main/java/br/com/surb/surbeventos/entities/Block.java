@@ -1,26 +1,39 @@
 package br.com.surb.surbeventos.entities;
 
+import jakarta.persistence.*;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
+@Entity
+@Table(name = "tb_block")
 public class Block implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -4872534519821726949L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long blockId;
-    private Instant start;
-    private Instant end;
+
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant startAt;
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant endAt;
+
+    @ManyToOne
+    @JoinColumn(name = "activity_id")
+    private Activity activity;
 
     public Block() {
     }
 
-    public Block(Long blockId, Instant start, Instant end) {
+    public Block(Long blockId, Instant startAt, Instant endAt) {
         this.blockId = blockId;
-        this.start = start;
-        this.end = end;
+        this.startAt = startAt;
+        this.endAt = endAt;
     }
 
     public Long getBlockId() {
@@ -31,20 +44,20 @@ public class Block implements Serializable {
         this.blockId = blockId;
     }
 
-    public Instant getStart() {
-        return start;
+    public Instant getStartAt() {
+        return startAt;
     }
 
-    public void setStart(Instant start) {
-        this.start = start;
+    public void setStartAt(Instant startAt) {
+        this.startAt = startAt;
     }
 
-    public Instant getEnd() {
-        return end;
+    public Instant getEndAt() {
+        return endAt;
     }
 
-    public void setEnd(Instant end) {
-        this.end = end;
+    public void setEndAt(Instant endAt) {
+        this.endAt = endAt;
     }
 
     @Override

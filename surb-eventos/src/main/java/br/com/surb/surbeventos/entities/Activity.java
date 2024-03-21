@@ -1,18 +1,34 @@
 package br.com.surb.surbeventos.entities;
 
+import jakarta.persistence.*;
+
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Objects;
+import java.util.*;
 
+@Entity
+@Table(name = "tb_activity")
 public class Activity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -6540400649218654723L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long activityId;
     private String name;
     private String description;
     private Double price;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @ManyToMany(mappedBy = "activities")
+    private final Set<Participant> activities = new HashSet<>();
+
+    @OneToMany(mappedBy = "activity")
+    private final List<Block> blocks = new ArrayList<>();
 
     public Activity() {
     }
@@ -54,6 +70,14 @@ public class Activity implements Serializable {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public Set<Participant> getActivities() {
+        return activities;
     }
 
     @Override
